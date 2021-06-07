@@ -17,17 +17,16 @@ class ArticleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   
+    {
         $articles = Article::all();
 
         return view( 'article.index',compact('articles') );
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+
     public function create()
     {
         $categories = Categories::all();
@@ -42,16 +41,15 @@ class ArticleController extends Controller
      */
     public function store(ArticlesRequest $request)
     {
-        
+
+        $pathFile = '';
         if($request->hasFile('avatar') ){
-           
             //save avatar
             $oriFileName = $request->avatar->getClientOriginalName();
             $filename = str_replace(' ', '-', $oriFileName);
             $filename = uniqid() . '-' . $filename;
-            $path = $request->file('avatar')->storeAs('public/posts', $filename);
-            $pathFile = "storage/posts/".$filename;
-
+            $path = $request->file('avatar')->storeAs('posts', $filename, 'public');
+            $pathFile = "storage/".$path;
         }
 
         if( $request->status == '' ){
@@ -60,19 +58,18 @@ class ArticleController extends Controller
         $slug = str_slug($request->title);
         $result = Article::create([
             'title' => $request->title,
-            'avatar' => $pathFile ? $pathFile : '',
+            'avatar' => $pathFile,
             'slug' => $slug,
-            'categories_id ' => $request->categories_id,
+            'categories_id' => $request->categories_id,
             'short_desc' => $request->short_desc,
             'content' => $request->content,
             'status' => $request->status
         ]);
-
         if ($result) {
-            $articles = Article::all();
-            return view('article.index', compact('articles'))->with('msg', 'Thêm thành công bài viết');
+            return redirect('article')->with('msg', 'Thêm thành công bài viết');
+        } else {
+            return redirect()->back();
         }
-        
     }
 
     /**
@@ -113,34 +110,35 @@ class ArticleController extends Controller
     public function update(ArticlesRequest $request, $id)
     {
 
-        if($request->hasFile('image') != ''){
+        if($request->hasFile('avatar') != ''){
             $oriFileName = $request->avatar->getClientOriginalName();
             $filename = str_replace(' ', '-', $oriFileName);
             $filename = uniqid() . '-' . $filename;
-            $path = $request->file('avatar')->storeAs('public/posts', $filename);
-            $pathFile = "storage/posts/".$filename;
-            $result = Article::where('id', $request->id ) -> update([
+            $path = $request->file('avatar')->storeAs('posts', $filename, 'public');
+            $pathFile = "storage/".$path;
+            $result = Article::where('id', $request->id )->update([
                 'avatar' => $pathFile ? $pathFile : ''
             ]);
         }
         if( $request->status == '' ){
             $status = '1';
         }
-        echo $request->status;
         $slug = str_slug($request->title);
-        $result = Article::where('id', $request->id ) -> update([
+        $result = Article::where('id', $request->id )->update([
             'title' => $request->title,
             'slug' => $slug,
-            'categories_id ' => $request->categories_id,
+            'categories_id' => $request->categories_id,
             'short_desc' => $request->short_desc,
             'content' => $request->content,
             'status' => $request->status
         ]);
 
         if ($result) {
-            return redirect(route('article.index'));
+            return redirect('article')->with('msg', 'Sửa thành công bài viết');
+        } else {
+            return redirect()->back();
         }
-        
+
     }
 
     /**
@@ -159,6 +157,7 @@ class ArticleController extends Controller
 				DB::commit();
 			}
     	}catch(Exception $ex){
+            logger(__METHOD__ . __LINE__ . $ex->getMessage());
     		DB::rollback();
     	}
 

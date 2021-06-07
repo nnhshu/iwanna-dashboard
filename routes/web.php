@@ -11,6 +11,8 @@
 |
 */
 
+use App\Models\Article;
+
 Route::get('/', function () {
     return view('auth/login');
 });
@@ -20,6 +22,17 @@ Auth::routes();
 
 Route::group(['prefix' => 'laravel-filemanager'], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
+});
+Route::get('test', function (){
+   $a=  Article::create([
+        'title' => '12341414',
+        'slug' => '12341414',
+        'categories_id' => '1',
+        'short_desc' => 1,
+        'content' => '123',
+        'status' =>'12321'
+    ]);
+   return $a;
 });
 
 Route::group(['middleware' => 'auth'], function () {

@@ -13,6 +13,7 @@ class Article extends Model
         'slug',
         'categories_id',
         'content',
+        'short_desc',
         'status'
     ];
 

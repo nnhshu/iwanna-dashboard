@@ -27,7 +27,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-    
+
     }
 
     /**
@@ -44,16 +44,10 @@ class CategoriesController extends Controller
         ]);
 
         if ($result) {
-            $categories = Categories::all();
-            return view('categories.index', compact('categories'))->with('msg', 'Thêm thành công danh mục');
+            return redirect('categories')->with('msg', 'Thêm thành công danh mục');
+        } else {
+            return redirect('categories')->with('msg_error', 'Thêm danh mục thất bại');
         }
-
-        Session::flash('error', trans('Thêm thất bại !'));
-
-        return response()->json([
-            'status' => false,
-        ]);
-
     }
 
     /**
@@ -95,8 +89,9 @@ class CategoriesController extends Controller
     {
         $result = Categories::whereId($id)->update( $request->except('_method', '_token') );
         if ($result) {
-            $categories = Categories::all();
-            return view('categories.index', compact('categories'))->with('msg', 'Cập nhật thành công danh mục');
+            return redirect('categories')->with('msg', 'Cập nhật thành công danh mục');
+        } else {
+            return redirect('categories')->with('msg_error', 'Cập nhật thất bại danh mục');
         }
     }
 
@@ -110,9 +105,11 @@ class CategoriesController extends Controller
     {
         $result = Categories::find($id);
         $result->delete();
+
         if ($result) {
-            $categories = Categories::all();
-            return view('categories.index', compact('categories'))->with('msg', 'Xoá thành công danh mục');
+            return redirect('categories')->with('msg', 'Xoá thành công danh mục');
+        } else {
+            return redirect('categories')->with('msg_error', 'Xóa thất bại danh mục');
         }
     }
 }

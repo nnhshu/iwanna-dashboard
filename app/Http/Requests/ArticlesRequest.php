@@ -25,7 +25,9 @@ class ArticlesRequest extends FormRequest
     {
         $validationRules = [
             'title' => 'required',
-            'content' => 'required'
+            'content' => 'required',
+            'short_desc' => 'required',
+            'avatar' => 'mimes:jpeg,jpg,png,gif|nullable|max:10000'
         ];
 
         switch ($this->method()) {
@@ -47,6 +49,8 @@ class ArticlesRequest extends FormRequest
             'title.required' => 'Tên bài viết không được bỏ trống',
             'title.unique' => 'Tên bài viết đã tồn tại',
             'content.required' => 'Nội dung không được bỏ trống',
+            'avatar.max' => 'Dung lượng ảnh phải < 10000kb',
+            'avatar.mimes' => 'Ảnh không phải định dạng: jpeg,jpg,png,gif',
         ];
 
     }

@@ -44,12 +44,18 @@
     <div class="col-xl-8 col-lg-8 col-md-8 col-sm-12 col-12 layout-spacing">
         <div class="statbox widget box box-shadow">
             <div class="widget-header">
-                @if( !empty($msg) )
-                    <div class="alert alert-success mb-4" role="alert">
+                @if( session('msg') )
+                    <div class="alert alert-success alert_message mb-4" role="alert">
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
-                        <strong>{{ $msg }}</button>
+                        <strong>{{session('msg') }} </strong></button>
                     </div>
                 @endif
+                    @if( session('msg_error') )
+                        <div class="alert alert-danger alert_message mb-4" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><svg> ... </svg></button>
+                            <strong>{{session('msg_error') }} </strong></button>
+                        </div>
+                    @endif
                 <div class="row">
                     <div class="col-xl-12 col-md-12 col-sm-12 col-12">
                         <h4>{{ __('Danh mục bài viết') }}</h4>
@@ -104,7 +110,7 @@
                     <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
             </div>
-           
+
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Discard</button>
                 <form id="removeCategoryForm" method="POST" onsubmit="">
@@ -152,9 +158,9 @@
             "pageLength": 5
         });
 
-        if( $('.alert-success') ){
-            setTimeout(function(){ 
-                $('.alert-success').remove(); 
+        if( $('.alert_message') ){
+            setTimeout(function(){
+                $('.alert_message').remove();
             }, 3000);
         };
 

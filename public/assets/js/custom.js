@@ -1,10 +1,16 @@
+//remove msg onchange input
+$('input[type="text"]').change(function (e) {
+    $(this).removeClass('is-invalid');
+    let spanmsg = $(this).parent().children('span');
+    $(spanmsg).hide();
+});
 /*
 =========================================
 |                                       |
 |           Scroll To Top               |
 |                                       |
 =========================================
-*/ 
+*/
 $('.scrollTop').click(function() {
     $("html, body").animate({scrollTop: 0});
 });
@@ -30,7 +36,7 @@ function checkall(clickchk, relChkbox) {
 
     checker.click(function () {
         multichk.prop('checked', $(this).prop('checked'));
-    });    
+    });
 }
 
 
@@ -74,7 +80,7 @@ function checkall(clickchk, relChkbox) {
 
     checker.click(function () {
         multichk.prop('checked', $(this).prop('checked'));
-    });    
+    });
 }
 
 /*
@@ -122,11 +128,11 @@ function GetIEVersion() {
   var Idx = sAgent.indexOf("MSIE");
 
   // If IE, return version number.
-  if (Idx > 0) 
+  if (Idx > 0)
     return parseInt(sAgent.substring(Idx+ 5, sAgent.indexOf(".", Idx)));
 
   // If IE 11 then look for Updated user agent string.
-  else if (!!navigator.userAgent.match(/Trident\/7\./)) 
+  else if (!!navigator.userAgent.match(/Trident\/7\./))
     return 11;
 
   else
